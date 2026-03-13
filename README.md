@@ -1,12 +1,14 @@
-# Beginner DevOps CI/CD Backend
+# DevOps CI/CD Todo API
 
-A simple Node.js and Express backend built as a beginner-friendly DevOps project. The app exposes a basic API, includes an automated health check route, runs inside Docker, and includes a GitHub Actions CI workflow for test automation.
+A more production-style Node.js and Express backend built for learning DevOps step by step. The project now includes a PostgreSQL-backed CRUD API, Docker containerization, Docker Compose orchestration, automated tests, and a GitHub Actions CI workflow.
 
 ## Features
 
 - Express backend with JSON responses
+- PostgreSQL-backed Todo CRUD API
 - Health endpoint at `/health`
 - Dockerized app for container-based deployment
+- Docker Compose setup for app plus database
 - Basic automated test using Node's built-in test runner
 - GitHub Actions workflow for continuous integration
 
@@ -16,13 +18,27 @@ A simple Node.js and Express backend built as a beginner-friendly DevOps project
 .
 |-- .github/workflows/ci.yml
 |-- app.js
+|-- db.js
 |-- server.js
+|-- docker-compose.yml
+|-- init.sql
 |-- tests/app.test.js
 |-- Dockerfile
+|-- .env.example
 |-- package.json
 ```
 
-## Run Locally
+## API Endpoints
+
+- `GET /`
+- `GET /health`
+- `GET /api/todos`
+- `GET /api/todos/:id`
+- `POST /api/todos`
+- `PUT /api/todos/:id`
+- `DELETE /api/todos/:id`
+
+## Run Locally With PostgreSQL
 
 Install dependencies:
 
@@ -30,7 +46,13 @@ Install dependencies:
 npm install
 ```
 
-Start the development server:
+Create your environment file:
+
+```bash
+cp .env.example .env
+```
+
+Make sure PostgreSQL is running locally, then start the server:
 
 ```bash
 npm run dev
@@ -47,24 +69,31 @@ Open:
 - `http://localhost:3000/`
 - `http://localhost:3000/health`
 
-## Run With Docker
-
-Build the image:
+Example request:
 
 ```bash
-docker build -t express-devops-app .
+curl -X POST http://localhost:3000/api/todos \
+  -H "Content-Type: application/json" \
+  -d '{"title":"Learn Docker Compose"}'
 ```
 
-Run the container:
+## Run With Docker Compose
+
+Start the API and PostgreSQL together:
 
 ```bash
-docker run -p 3000:3000 express-devops-app
+docker compose up --build
 ```
 
-If port `3000` is already in use on your machine:
+This will start:
+
+- API on `http://localhost:3000`
+- PostgreSQL on `localhost:5432`
+
+To stop everything:
 
 ```bash
-docker run -p 3001:3000 express-devops-app
+docker compose down
 ```
 
 ## CI Pipeline
@@ -77,4 +106,4 @@ The GitHub Actions workflow:
 
 ## Resume Description
 
-Built and dockerized a Node.js and Express backend with health-check endpoints, automated testing, and a GitHub Actions CI workflow to demonstrate beginner DevOps and CI/CD practices.
+Built a Dockerized Node.js and Express Todo API with PostgreSQL, CRUD endpoints, automated tests, Docker Compose orchestration, and a GitHub Actions CI workflow to demonstrate practical DevOps and CI/CD skills.
