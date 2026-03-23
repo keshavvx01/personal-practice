@@ -1,1 +1,1 @@
-stash file check
+(seprate edit)stash file check
